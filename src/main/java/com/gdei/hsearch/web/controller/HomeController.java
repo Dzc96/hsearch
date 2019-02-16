@@ -36,6 +36,10 @@ public class HomeController {
         return "500";
     }
 
+    /**
+     * 注销
+     * @return
+     */
     @GetMapping("/logout/page")
     public String logoutPage() {
         return "logout";

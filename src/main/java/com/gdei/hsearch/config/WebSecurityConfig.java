@@ -2,6 +2,7 @@ package com.gdei.hsearch.config;
 
 
 import com.gdei.hsearch.security.AuthProvider;
+import com.gdei.hsearch.security.LoginUrlEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +35,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .and();
+                .and()
+                .logout()
+                .logoutUrl("/logout/page")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(urlEntryPoint())
+                .accessDeniedPage("/403");//无权访问时的验证页面
 
                 //关闭CSRF防护
                 http.csrf().disable();
@@ -61,4 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AuthProvider();
     }
 
+
+    @Bean
+    public LoginUrlEntryPoint urlEntryPoint(){
+        return new LoginUrlEntryPoint("/user/login");//默认走普通用户的登陆页面
+    }
 }
