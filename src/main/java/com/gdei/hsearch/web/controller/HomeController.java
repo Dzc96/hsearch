@@ -36,6 +36,12 @@ public class HomeController {
         return "500";
     }
 
+    @GetMapping("/600")
+    public String finternalError() {
+        return "500";
+    }
+
+
     /**
      * 注销
      * @return

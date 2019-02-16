@@ -2,6 +2,7 @@ package com.gdei.hsearch.config;
 
 
 import com.gdei.hsearch.security.AuthProvider;
+import com.gdei.hsearch.security.LoginAuthFailHandler;
 import com.gdei.hsearch.security.LoginUrlEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
+                .failureHandler(authFailHandler())
                 .and()
                 .logout()
                 .logoutUrl("/logout/page")
@@ -70,9 +72,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AuthProvider();
     }
 
-
     @Bean
     public LoginUrlEntryPoint urlEntryPoint(){
         return new LoginUrlEntryPoint("/user/login");//默认走普通用户的登陆页面
     }
+
+    @Bean
+    public LoginAuthFailHandler authFailHandler(){
+        return new LoginAuthFailHandler(urlEntryPoint());
+    }
+
+
+
 }
