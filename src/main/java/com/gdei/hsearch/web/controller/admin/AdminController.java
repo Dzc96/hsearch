@@ -39,6 +39,25 @@ public class AdminController {
         return "admin/login";
     }
 
+    /**
+     * 房源列表页
+     * @return
+     */
+    @GetMapping("admin/house/list")
+    public String houseListPage() {
+        return "admin/house-list";
+    }
+
+
+    /**
+     * 新增房源功能页
+     * @return
+     */
+    @GetMapping("admin/add/house")
+    public String addHousePage() {
+        return "admin/house-add";
+    }
+
 
     /**
      * 上传图片到七牛云

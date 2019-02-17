@@ -14,7 +14,7 @@ public class User implements UserDetails {
 
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
 
     private String name;
@@ -40,24 +40,12 @@ public class User implements UserDetails {
 
     private String avatar;
 
-    @Transient //让JPA忽略验证这个属性和表中的字段是否一致
-    private List<GrantedAuthority> authorityList; //保存用户的所有角色
-
-    public List<GrantedAuthority> getAuthorityList() {
-        return authorityList;
-    }
-
-    public void setAuthorityList(List<GrantedAuthority> authorityList) {
-        this.authorityList = authorityList;
-    }
-
-
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getName() {
@@ -68,9 +56,20 @@ public class User implements UserDetails {
         this.name = name;
     }
 
+    @Transient
+    private List<GrantedAuthority> authorityList;
+
+    public List<GrantedAuthority> getAuthorityList() {
+        return authorityList;
+    }
+
+    public void setAuthorityList(List<GrantedAuthority> authorityList) {
+        this.authorityList = authorityList;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return this.authorityList;
     }
 
     public String getPassword() {

@@ -25,33 +25,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //配置访问资源的权限
+        // 资源访问权限
         http.authorizeRequests()
-                .antMatchers("/admin/login").permitAll()
-                .antMatchers("/static/**").permitAll()
-                .antMatchers("/user/login").permitAll()
+                .antMatchers("/admin/login").permitAll() // 管理员登录入口
+                .antMatchers("/static/**").permitAll() // 静态资源
+                .antMatchers("/user/login").permitAll() // 用户登录入口
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("ADMIN","USER")
-                .antMatchers("/api/user/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/api/user/**").hasAnyRole("ADMIN",
+                "USER")
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/login") // 配置角色登录处理入口
                 .failureHandler(authFailHandler())
                 .and()
                 .logout()
-                .logoutUrl("/logout/page")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/logout/page")
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(urlEntryPoint())
-                .accessDeniedPage("/403");//无权访问时的验证页面
+                .accessDeniedPage("/403");
 
-                //关闭CSRF防护
-                http.csrf().disable();
-                //开启同源
-                http.headers().frameOptions().sameOrigin();
-
+        http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
     }
 
     /**
@@ -82,6 +81,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new LoginAuthFailHandler(urlEntryPoint());
     }
 
-
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        AuthenticationManager authenticationManager = null;
+        try {
+            authenticationManager =  super.authenticationManager();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return authenticationManager;
+    }
 
 }
