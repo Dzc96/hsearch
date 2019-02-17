@@ -57,14 +57,17 @@ public class ApiResponse {
 
     //通过静态方法快速构建返回状态(主要是正常的返回状态)，而不是自己慢慢new
     //静态方法有的没数据，有的有数据
+    //offMessage类似offStatus，说明请求不一定成功，返回提示信息，不返回数据
     public static ApiResponse ofMessage(int code, String message) {
         return new ApiResponse(code, message, null);
     }
 
+    //ofSuccess说明请求成功，并返回数据
     public static ApiResponse ofSuccess(Object data) {
         return new ApiResponse(Status.SUCCESS.getCode(), Status.SUCCESS.getStandardMessage(), data);
     }
 
+    //ofStatus说明请求不一定成功，说明请求不一定成功，返回提示信息，不返回数据
     public static ApiResponse ofStatus(Status status) {
         return new ApiResponse(status.getCode(), status.getStandardMessage(), null);
     }
